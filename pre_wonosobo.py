@@ -13,7 +13,7 @@ from nltk.corpus import stopwords
 from Sastrawi.Stemmer.StemmerFactory import StemmerFactory
 import swifter
 
-path = 'data/dataset_film.csv'
+path = 'data/Dataset_Review_Dieng.csv'
 data = pd.read_csv(path, header=None, names=['sentiment', 'review'])
 
 # TEXT PREPROCESSING
@@ -92,22 +92,19 @@ data['review'] = data['review'].apply(removeSingleChar)
 # NLTK word rokenize
 
 
-def word_tokenize_wrapper(text):
+def wordTokenizeWrapper(text):
     return word_tokenize(text)
 
 
-data['review_tokens'] = data['review'].apply(word_tokenize_wrapper)
+data['review_tokens'] = data['review'].apply(wordTokenizeWrapper)
 
 print('Tokenizing Result : \n')
 print(data['review_tokens'].head())
 print('\n\n\n')
 
 # NLTK calc frequency distribution
-
-
 def freqDistWrapper(text):
     return FreqDist(text)
-
 
 data['review_tokens_fdist'] = data['review_tokens'].apply(freqDistWrapper)
 
@@ -121,8 +118,15 @@ print(data['review_tokens_fdist'].head().apply(lambda x: x.most_common()))
 #     df_freq_tokens.index.name = 'Key'
 #     df_freq_tokens.plot(kind='bar')
 
-
 # df_freq_tokens = data['review_tokens_fdist'].head().apply(visualiseFreqToken)
+
+# df_freq_tokens = pd.DataFrame.from_dict(data['review_tokens_fdist'][0], orient='index')
+# df_freq_tokens.columns = ['Frequency']
+# df_freq_tokens.index.name = 'Key'
+
+# df_freq_tokens.plot(kind='bar')
+
+
 
 # 3 Filtering (Stopword Removal)
 # get stopword indonesia
@@ -212,8 +216,7 @@ def getStemmedTerm(document):
     return [term_dict[term] for term in document]
 
 
-data['review_tokens_stemmed'] = data['review_normalized'].swifter.apply(
-    getStemmedTerm)
+data['review_tokens_stemmed'] = data['review_normalized'].swifter.apply(getStemmedTerm)
 print(data['review_tokens_stemmed'])
 
-data.to_csv("Text_Preprocessing.csv")
+data.to_csv("data/Text_Preprocessing.csv")

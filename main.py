@@ -26,6 +26,11 @@ vect.fit(X_train)
 X_train_dtm = vect.transform(X_train) 
 X_test_dtm = vect.transform(X_test)
 
+print('\nX_train', X_train)
+print('\nX_train_dtm', X_train_dtm)
+print('\nX_test', X_test)
+print('\nX_test_dtm', X_test_dtm)
+
 #Accuracy using Naive Bayes Model
 NB = MultinomialNB()
 NB.fit(X_train_dtm, y_train)
