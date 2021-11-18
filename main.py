@@ -73,6 +73,7 @@ tokens = pd.DataFrame(df_table, columns= ['Token','Positive','Negative'])
 positives = len(tokens[tokens['Positive']>tokens['Negative']])
 print('No. of positive tokens: ',positives)
 print('No. of negative tokens: ',len(tokens_words)-positives)
+
 #Check positivity/negativity of specific tokens
 token_search = ['awesome']
 print('\nSearch Results for token/s:',token_search)

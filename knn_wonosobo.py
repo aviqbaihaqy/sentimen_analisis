@@ -1,22 +1,46 @@
 # Importing Essentials
+import numpy as np
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.feature_extraction.text import TfidfTransformer
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.pipeline import Pipeline
 import pandas as pd
 from sklearn import metrics
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
+from collections import Counter
 
-DATA = pd.read_csv("data/Text_Preprocessing.csv", usecols=["review", "TFIDF_UNIGRAM"])
-DATA.columns = ["review", "TFIDF_UNIGRAM"]
+# random urutan dan split ke data training dan test
+from sklearn.model_selection import train_test_split
 
+DATA = pd.read_csv("data/Dataset_Review_Dieng.csv",
+                   header=None, names=['sentiment', 'review'])
 
-knn = neighbors.KNeighborsClassifier(n_neighbors=5, weights='distance', algorithm='brute', leaf_size=30, p=2,
-                                     metric='cosine', metric_params=None, n_jobs=1)
+X_train, X_test, y_train, y_test = train_test_split(
+    DATA['review'], DATA['sentiment'], test_size=0.2, random_state=123)
 
-knn.fit(X_train, y_train)
-predicted = knn.predict(X_test)
-acc = metrics.accuracy_score(y_test, predicted)
-print('KNN with TFIDF accuracy = ' + str(acc * 100) + '%')
+print("\nData training:")
+print(len(X_train))
+print(Counter(y_train))
 
-scores = cross_val_score(knn, X_train, y_train, cv=3)
-print("Cross Validation Accuracy: %0.2f (+/- %0.2f)" %
-      (scores.mean(), scores.std() * 2))
-print(scores)
+print("\nData testing:")
+print(len(X_test))
+print(Counter(y_test))
+
+# coba prediksi data baru
+# review_baru = ['Dieng sekarang kotor']
+review_baru = ['Dieng pemandangannya bagus sekali']
+
+# transform ke tfidf dan train dengan KNN
+KNN = Pipeline([('vect', CountVectorizer()),('tfidf', TfidfTransformer()), ('knn', KNeighborsClassifier(n_neighbors = 3))])
+KNN.fit(X_train, y_train)
+
+#Accuracy using KNN Model
+knn_pred = KNN.predict(review_baru)
+print("Hasil prediksi {}".format(knn_pred))
+
+# hitung akurasi data test
+pred = KNN.predict(X_test)
+akurasi = np.mean(pred == y_test)
+print("Akurasi: {}".format(akurasi))
+
