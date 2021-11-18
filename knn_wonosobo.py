@@ -37,10 +37,24 @@ KNN.fit(X_train, y_train)
 
 #Accuracy using KNN Model
 knn_pred = KNN.predict(review_baru)
+print(review_baru)
 print("Hasil prediksi {}".format(knn_pred))
 
 # hitung akurasi data test
 pred = KNN.predict(X_test)
 akurasi = np.mean(pred == y_test)
 print("Akurasi: {}".format(akurasi))
+
+
+#Input Review
+print('\nTest a custom review message')
+print('Enter review to be analysed: ', end=" ")
+test = []
+test.append(input())
+
+# test_dtm = trainingVector.transform(test)
+predLabel = KNN.predict(test)
+tags = ['Negative','Positive']
+#Display Output
+print('The review is predicted',tags[predLabel[0]])
 
